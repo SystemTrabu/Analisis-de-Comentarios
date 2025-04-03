@@ -3,46 +3,36 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 import re
 import unicodedata
 
-# Función de limpieza de texto (igual que en el script de entrenamiento)
+# Función de limpieza de texto 
 def limpiar_texto(texto):
     if not isinstance(texto, str):
         return ""
     
-    # Convertir a minúsculas
     texto = texto.lower()
     
-    # Normalizar caracteres unicode (acentos, etc.)
     texto = unicodedata.normalize('NFKD', texto).encode('ASCII', 'ignore').decode('utf-8')
     
-    # Eliminar URLs
     texto = re.sub(r'https?://\S+|www\.\S+', ' ', texto)
     
-    # Normalizar menciones y hashtags
     texto = re.sub(r'@\w+', '@usuario', texto)
     texto = re.sub(r'#\w+', '#hashtag', texto)
     
-    # Normalizar alargamientos de palabras (repetición de letras)
     texto = re.sub(r'([a-z])\1{2,}', r'\1\1', texto)  # Reduce repeticiones a máximo 2
     
-    # Limpiar espacios en blanco extras
     texto = re.sub(r'\s+', ' ', texto).strip()
     
-    # Normalizar puntuación repetida
     texto = re.sub(r'([!?.,;:])\1+', r'\1', texto)
     
     return texto
 
-# Cargar el modelo y tokenizador previamente entrenados
 ruta_modelo = "./detector_groserias_final"
 tokenizer = AutoTokenizer.from_pretrained(ruta_modelo)
 model = AutoModelForSequenceClassification.from_pretrained(ruta_modelo)
 
 # Función para usar el modelo entrenado
 def detectar_groserías(texto):
-    # Limpiamos el texto de entrada usando la misma función
     texto_limpio = limpiar_texto(texto)
     
-    # Tokenizamos y hacemos la predicción
     inputs = tokenizer(texto_limpio, return_tensors="pt", padding=True, truncation=True)
     outputs = model(**inputs)
     probs = torch.nn.functional.softmax(outputs.logits, dim=1)

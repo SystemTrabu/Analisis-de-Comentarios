@@ -36,7 +36,6 @@ def limpiar_texto(texto):
     return texto
 
 # 1. Preparar el dataset
-# Supongamos que tienes un CSV con columnas "texto" y "es_groseria" (0 o 1)
 df = pd.read_csv("dataset/dataset.csv")
 
 # Aplicar limpieza a los textos del dataset
@@ -123,7 +122,6 @@ tokenizer.save_pretrained("./detector_groserias_final")
 
 # 10. Función para usar el modelo entrenado - Ahora incluye limpieza de texto
 def detectar_groserías(texto, modelo, tokenizador):
-    # Limpiamos el texto de entrada usando la misma función
     texto_limpio = limpiar_texto(texto)
     
     # Tokenizamos y hacemos la predicción
@@ -138,7 +136,6 @@ def detectar_groserías(texto, modelo, tokenizador):
         "probabilidad": probs[0][1].item()
     }
 
-# Ejemplo de uso
 texto_prueba = "estoy cansada mentalmente, ya no se que hacer con mi vida"
 resultado = detectar_groserías(texto_prueba, model, tokenizer)
 print(resultado)

@@ -1,10 +1,10 @@
 # Hackathon-Tec-2025
 Codigo del reto Hackathon Tec 2025
 
-#IMPORTANTE:
+*IMPORTANTE:*
 Usar la version de python menor a la 3.13 de lo contrario creara problemas
 
-#Instrucciones:
+*Instrucciones:*
 
 En la terminal ejecuta "pip install -r requierments.txt"
 

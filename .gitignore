@@ -4,3 +4,4 @@ detector_groserias_final/
 __pycache__
 intelisis_model/
 results/
+logs/

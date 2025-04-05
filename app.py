@@ -10,11 +10,16 @@ from collections import Counter
 from categorias import clasificar_categorias
 from flask_migrate import Migrate
 from collections import defaultdict
+from flask_cors import CORS
+from tendencia import generar_reporte
+from flask import send_file
+import os
+
 
 
 
 app = Flask(__name__)
-
+CORS(app)
 # Configuración de MySQL
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost/comentarios'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -33,7 +38,7 @@ def palabrasUsadas(comentarios):
     palabras = re.findall(r'\b\w+\b', texto_unido.lower())
 
     # Lista de palabras a excluir (stopwords)
-    stopwords = {"el", "la", "es", "muy", "pero", "no", "nada", "si", "ellos", "su", "son", "lo","me","sus","y"}
+    stopwords = {"el", "la", "es", "muy", "pero", "no", "nada", "si", "ellos", "su", "son", "lo","me","sus","y", "que","de","un","este","he"}
     
     # Filtrar las palabras eliminando las stopwords
     palabras_filtradas = [p for p in palabras if p not in stopwords]
@@ -70,7 +75,14 @@ def get_coments():
             {
                 "id": comentario.id,
                 "comentario": comentario.comentario,
-                "categoria": "positivo" if comentario.id in [c.id_comentario for c in comentarios_pos] else ("negativo" if comentario.id in [c.id_comentario for c in comentarios_neg] else "neutral")
+                "polaridad": "positivo" if comentario.id in [c.id_comentario for c in comentarios_pos] else ("negativo" if comentario.id in [c.id_comentario for c in comentarios_neg] else "neutral"),
+                "categoria": [
+                    {
+                        "categoria_id": cat.id_categoria,
+                        "categoria_nombre": cat.categoria.categoria  # Asegúrate de tener el atributo 'nombre' en la tabla 'Categoria'
+                    }
+                    for cat in comentario.categoria_comen
+                ]
             }
             for comentario in comentarios
         ]
@@ -160,6 +172,49 @@ def procesar_comentarios():
 
     return jsonify({"procesados": resultados}), 200
 
+@app.route('/getComents/')
+def getComents():
+    comentarios = Comentario.query.all()
+    resultado = []
+
+    for comentario in comentarios:
+        resultado.append({
+            "id": comentario.id,
+            "comentario": comentario.comentario,
+            "categorias": [cat.categoria.categoria for cat in comentario.categoria_comen],
+            "fecha": comentario.fecha.isoformat() if comentario.fecha else None,
+            "hora": comentario.hora.strftime('%H:%M:%S') if comentario.hora else None
+        })
+
+    return jsonify(resultado)
+
+
+@app.route('/getComentsPos/')
+def getComentsPos():
+    comentarios = ComentarioPos.query.all()  # Ordenar por fecha descendente
+    comentarios_neu = ComentarioNeu.query.all()  # Ordenar por fecha descendente
+    resultado = []
+
+    for comentario in comentarios_neu:
+        resultado.append({
+            "id": comentario.id,
+            "comentario": comentario.comentario.comentario,  # Accedemos a 'comentario' que es el objeto relacionado
+            "fecha": comentario.comentario.fecha.isoformat() if comentario.comentario.fecha else None  # Accedemos a 'comentario' y luego 'fecha'
+        })
+
+    
+    for comentario in comentarios:
+        resultado.append({
+            "id": comentario.id,
+            "comentario": comentario.comentario.comentario,  # Accedemos a 'comentario' que es el objeto relacionado
+            "fecha": comentario.comentario.fecha.isoformat() if comentario.comentario.fecha else None  # Accedemos a 'comentario' y luego 'fecha'
+        })
+
+    return jsonify(resultado)
+
+
+
+
 
 @app.route('/grafica_sentimiento/', methods=['POST'])
 def grafica_sentimiento():
@@ -229,10 +284,25 @@ def grafica_sentimiento():
 
 
 
+
+@app.route('/reporteAll/', methods=['GET'])
+def generar_reporteAll():
+    comentarios = Comentario.query.all()
+    comentarios_pos = ComentarioPos.query.all()
+    comentarios_neg = ComentarioNeg.query.all()
+    comentarios_neu = ComentarioNeu.query.all()
+    reporte_pdf=generar_reporte(comentarios, comentarios_pos, comentarios_neu, comentarios_neg)
+
+    return send_file(
+    reporte_pdf, 
+    as_attachment=True,  
+    download_name=os.path.basename(reporte_pdf),  
+    mimetype='application/pdf'
+)
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     
- 
-
     app.run(debug=True)

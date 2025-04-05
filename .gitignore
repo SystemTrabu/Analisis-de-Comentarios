@@ -5,3 +5,5 @@ __pycache__
 intelisis_model/
 results/
 logs/
+migrations/
+.vscode/

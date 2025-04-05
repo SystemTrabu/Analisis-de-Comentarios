@@ -88,6 +88,9 @@ def analizar_pol(texto):
     confidence_score = probabilities[0][predicted_class_idx].item()
     
     return [{"label": predicted_label, "score": confidence_score}]
+
+
+#Buscar palabras mas repetidas
 '''
 def tokenizar():
         tokens = word_tokenize(texto)

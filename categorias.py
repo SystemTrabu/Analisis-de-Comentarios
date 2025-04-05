@@ -1,12 +1,20 @@
-import fasttext
+from transformers import pipeline
 
-# Entrenar el modelo de clasificación
-model = fasttext.train_supervised(input="comentarios.txt")
+classifier = pipeline("zero-shot-classification", model="joeddav/xlm-roberta-large-xnli")
 
-# Evaluar el modelo (opcional)
-print("Precisión en el test:", model.test("comentarios_test.txt"))
+def clasificar_categorias(texto):
+    etiquetas = ["rendimiento", "soporte", "usabilidad", "sugerencias", "calidad", "odio", "preguntas"]
+    
+    resultado = classifier(texto, etiquetas, multi_label=True)
+    
+    primero = resultado['labels'][0]
+    segundo = resultado['labels'][1] if resultado['scores'][1] >= 0.80 else None
+    
+    if segundo:
+        return [primero, segundo]
+    else:
+        return [primero]
 
-# Realizar una predicción
-comentario_nuevo = "La interfaz de usuario es muy intuitiva."
-categoria_predicha = model.predict(comentario_nuevo)
-print(f"El comentario pertenece a la categoría: {categoria_predicha[0][0]}")
+
+
+print(clasificar_categorias("son una mierda de empresa"))

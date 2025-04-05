@@ -136,6 +136,6 @@ def detectar_groserías(texto, modelo, tokenizador):
         "probabilidad": probs[0][1].item()
     }
 
-texto_prueba = "estoy cansada mentalmente, ya no se que hacer con mi vida"
+texto_prueba = "estoy cansada mentalmente, ya no se que hacer con mi vida puta"
 resultado = detectar_groserías(texto_prueba, model, tokenizer)
 print(resultado)

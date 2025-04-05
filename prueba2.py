@@ -7,13 +7,15 @@ from nltk.corpus import stopwords
 from transformers import BertForSequenceClassification, BertTokenizer, pipeline, MarianMTModel, MarianTokenizer
 from langdetect import detect
 import torch
+from transformers import MarianMTModel, MarianTokenizer, pipeline
+import pandas as pd
 
 # Descargar recursos de NLTK
-nltk.download('punkt_tab')
-nltk.download('stopwords')
 nltk.download('punkt')
+nltk.download('stopwords')
 
-# Cargar stopwords una vez y procesarlas
+# Cargar el modelo de spaCy una sola vez
+nlp = spacy.load("es_core_news_sm")
 spanish_stopwords = set(word.lower() for word in stopwords.words('spanish'))
 spanish_stopwords.discard("si")
 spanish_stopwords.discard("no")
@@ -29,10 +31,8 @@ spanish_stopwords.discard("son")
 spanish_stopwords.discard("sus")
 spanish_stopwords.discard("para")
 
-# Cargar spaCy una vez
-nlp = spacy.load("es_core_news_sm")
 
-# Cargar modelo personalizado entrenado y tokenizador
+
 model_path = "./intelisis_model"
 tokenizer = BertTokenizer.from_pretrained(model_path)
 model = BertForSequenceClassification.from_pretrained(model_path)
@@ -88,4 +88,37 @@ def analizar_pol(texto):
     confidence_score = probabilities[0][predicted_class_idx].item()
     
     return [{"label": predicted_label, "score": confidence_score}]
+'''
+def tokenizar():
+        tokens = word_tokenize(texto)
+        texto_filtrado = [palabra for palabra in tokens if palabra not in spanish_stopwords]
 
+        # Lematizar el texto
+        doc = nlp(" ".join(texto_filtrado))
+        lematizado = [token.lemma_ for token in doc]
+        
+        return lematizado
+
+
+'''
+''' 
+# Función de conversión desde el archivo Excel
+def conversion():
+    # Cargar el archivo Excel
+    df = pd.read_excel('frases_numeradas.xlsx')
+
+    # Mapea las clases numéricas a sus etiquetas
+    etiquetas = {1: '__label__usabilidad', 2: '__label__soporte', 3: '__label__rendimiento'}
+
+    # Crear un archivo de texto con el formato adecuado para FastText
+    with open('comentarios.txt', 'w', encoding='utf-8') as f:
+        for _, row in df.iterrows():
+            etiqueta = etiquetas.get(row['Clase'])
+            comentario = row['Comentario']
+                
+            # Llamar a la función limpiar_texto de la clase prueba2
+            comentario = prueba2.limpiar_texto(comentario)  # Corregido para llamar correctamente al método estático
+            
+            if etiqueta:
+                f.write(f"{etiqueta} {' '.join(comentario)}\n")  # Unir el texto lematizado y escribirlo en el archivo
+'''

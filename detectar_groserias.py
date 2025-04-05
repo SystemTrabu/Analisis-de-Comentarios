@@ -76,3 +76,5 @@ if __name__ == "__main__":
         print(f"\n{emoji} Texto: {resultado['texto_original']}")
         print(f"   Texto limpio: {resultado['texto_procesado']}")
         print(f"   Groseria: {resultado['es_groseria']} (Probabilidad: {resultado['probabilidad']:.2%})")
+
+

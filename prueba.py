@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 import re
 import unicodedata
 
-# Función de limpieza de texto
+
 def limpiar_texto(texto):
     if not isinstance(texto, str):
         return ""
@@ -83,7 +83,7 @@ eval_dataset = DatasetGroserias(
 # 5. Configurar el entrenamiento
 training_args = TrainingArguments(
     output_dir="./detector_groserias",
-    evaluation_strategy="epoch",
+    eval_strategy="epoch",
     save_strategy="epoch",
     num_train_epochs=4,
     per_device_train_batch_size=16,

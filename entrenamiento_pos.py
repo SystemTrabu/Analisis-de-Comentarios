@@ -103,12 +103,9 @@ trainer.train()
 model.save_pretrained("./intelisis_model")
 tokenizer.save_pretrained("./intelisis_model")
 
-# Add code to use the trained model to predict sentiments
 def predict_sentiment(text):
-    # Apply the same preprocessing as during training
     preprocessed_text = preprocess_text(text)
     
-    # Tokenize and get prediction
     inputs = tokenizer(preprocessed_text, return_tensors="pt", padding=True, truncation=True, max_length=128)
     with torch.no_grad():
         outputs = model(**inputs)
@@ -119,7 +116,6 @@ def predict_sentiment(text):
     sentiment_map = {0: "Negativo", 1: "Neutro", 2: "Positivo"}
     return sentiment_map[predicted_class]
 
-# Examples of use
 examples = [
     "Esta cabronsisimo su producto",
     "Esta culero su producto, no vuelvo a comprar",

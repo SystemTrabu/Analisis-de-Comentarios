@@ -14,7 +14,3 @@ def clasificar_categorias(texto):
         return [primero, segundo]
     else:
         return [primero]
-
-
-
-print(clasificar_categorias("son una mierda de empresa"))

@@ -28,6 +28,8 @@ spanish_stopwords.discard("la")
 spanish_stopwords.discard("son")
 spanish_stopwords.discard("sus")
 spanish_stopwords.discard("para")
+spanish_stopwords.discard("me")
+spanish_stopwords.discard("pero")
 
 
 

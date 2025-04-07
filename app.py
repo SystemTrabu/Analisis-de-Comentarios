@@ -88,6 +88,23 @@ def get_coments():
 
 @app.route('/procesar_comentarios/', methods=['POST'])
 def procesar_comentarios():
+    '''
+    El Json de entrada debera contar con el sig formato, puede ser 1 o multiples comentarios
+    
+    {
+    "comentarios": 
+        [
+            {
+                "comentario": "comentario str",
+                "fecha": "YYYY-MM-DD",
+                "usuario": "usuario que comento",
+                "hora": "hora del comentario"
+            }
+        ]
+    }
+
+
+    '''
     data = request.get_json()
 
     if not data or "comentarios" not in data:
@@ -164,6 +181,9 @@ def procesar_comentarios():
 
 @app.route('/getComents/')
 def getComents():
+    '''
+    Este metodo devuelve todos los comentarios, tanto negativos (Censurados), positivos y neutrales
+    '''
     comentarios = Comentario.query.all()
     resultado = []
 
@@ -181,6 +201,9 @@ def getComents():
 
 @app.route('/getComentsPos/')
 def getComentsPos():
+    '''
+    Este metodo devuelve todos los comnentarios positivos y neutrales almacenados en la base de datos
+    '''
     comentarios = ComentarioPos.query.all()  
     comentarios_neu = ComentarioNeu.query.all()
     resultado = []
@@ -208,6 +231,19 @@ def getComentsPos():
 
 @app.route('/grafica_sentimiento/', methods=['POST'])
 def grafica_sentimiento():
+    '''
+    Este metodo devuelve los datos necesarios para graficar una grafica de tendencia
+    Los puntos retornables son el promedio por dia para generar la grafica de tendencia
+    El json de entrada en esta endpoint debera contener el sig formato:
+
+
+    {
+        "fecha_inicio": "YYYY-MM-DD",
+        "fecha_fin": "YYYY-MM-DD"
+    }
+
+
+    '''
     data = request.get_json()
     fecha_inicio = data.get('fecha_inicio')
     fecha_fin = data.get('fecha_fin')
@@ -266,6 +302,10 @@ def grafica_sentimiento():
 
 @app.route('/reporteAll/', methods=['GET'])
 def generar_reporteAll():
+
+    '''
+    Este metodo devuelve un reporte completo de todos los comentarios almacenados en la base de datos
+    '''
     comentarios = Comentario.query.all()
     comentarios_pos = ComentarioPos.query.all()
     comentarios_neg = ComentarioNeg.query.all()

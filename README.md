@@ -11,6 +11,7 @@ Este proyecto tiene como objetivo desarrollar un sistema de procesamiento y aná
 
 ## **Instalación**
 
+
 1. **Clonar el repositorio y configurar el entorno**:
    ```bash
    git clone https://github.com/tu_usuario/hackathon-tec-2025.git

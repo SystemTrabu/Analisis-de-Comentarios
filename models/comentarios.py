@@ -20,7 +20,6 @@ class CategoriaComen(db.Model):
     id_comentario = db.Column(db.Integer, db.ForeignKey('comentarios.id'), nullable=False)
     id_categoria = db.Column(db.Integer, db.ForeignKey('categorias.id'), nullable=False)
 
-    # Relaciones inversas
     comentario = db.relationship('Comentario', backref=db.backref('categoria_comen', lazy=True))
     categoria = db.relationship('Categoria', backref=db.backref('categoria_comen', lazy=True))
 
@@ -31,8 +30,7 @@ class Categoria(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     categoria = db.Column(db.String(100), nullable=False, unique=True)
 
-    # Se eliminó el atributo comentarios aquí
-    # comentarios = db.relationship('Comentario', backref='categoria', lazy=True)
+   
 
 class Comentario(db.Model):
     __tablename__ = 'comentarios'

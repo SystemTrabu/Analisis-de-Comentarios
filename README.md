@@ -1,5 +1,5 @@
 
-# Hackathon-Tec-2025
+# Analisis de Comentarios y Filtrado de Groserias
 
 ## **Descripción**
 Este proyecto tiene como objetivo desarrollar un sistema de procesamiento y análisis de comentarios, este codigo fue utilizado en un Hackathon y fue ganador del primer lugar, cuenta varias funcionalidades como detección de sentimientos, categorización, traducción, filtrado de groserías, y generación de reportes. El sistema utiliza procesamiento de lenguaje natural (NLP) y aprendizaje automático para clasificar los comentarios de manera efectiva.

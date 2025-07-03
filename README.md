@@ -2,7 +2,7 @@
 # Hackathon-Tec-2025
 
 ## **Descripción**
-Este proyecto tiene como objetivo desarrollar un sistema de procesamiento y análisis de comentarios con varias funcionalidades como detección de sentimientos, categorización, traducción, filtrado de groserías, y generación de reportes. El sistema utiliza procesamiento de lenguaje natural (NLP) y aprendizaje automático para clasificar los comentarios de manera efectiva.
+Este proyecto tiene como objetivo desarrollar un sistema de procesamiento y análisis de comentarios, este codigo fue utilizado en un Hackathon y fue ganador del primer lugar, cuenta varias funcionalidades como detección de sentimientos, categorización, traducción, filtrado de groserías, y generación de reportes. El sistema utiliza procesamiento de lenguaje natural (NLP) y aprendizaje automático para clasificar los comentarios de manera efectiva.
 
 ## **Requisitos**
 
@@ -14,8 +14,8 @@ Este proyecto tiene como objetivo desarrollar un sistema de procesamiento y aná
 
 1. **Clonar el repositorio y configurar el entorno**:
    ```bash
-   git clone https://github.com/tu_usuario/hackathon-tec-2025.git
-   cd hackathon-tec-2025
+   git clone [url]
+   cd [dir]
    pip install -r requirements.txt
    python -m spacy download es_core_news_sm
    python entrenamiento_pos.py
